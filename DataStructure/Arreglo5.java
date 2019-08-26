@@ -14,6 +14,7 @@ public class Arreglo5{
       str = JOptionPane.showInputDialog("Casilla ["+ i +"] = ");
       numero = Integer.parseInt(str);
       numeros[i] = numero;
+      //comentario 
     }
 
   }
