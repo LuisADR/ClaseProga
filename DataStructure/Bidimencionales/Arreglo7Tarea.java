@@ -53,19 +53,19 @@ public class Arreglo7Tarea{
     obtenerDatos(numeros1);
 
     // 4. Desplegar los datos del arreglo
-    JOptionPane.showMessageDialog(null, desplegarDatos(numeros1, "Primera matriz"));
+    JOptionPane.showMessageDialog(null, desplegarDatos(numeros1, "Primera matriz \n"));
 
     // 3. Obtener datos y asignarlos al arreglo
     obtenerDatos(numeros2);
 
     // 4. Desplegar los datos del arreglo
-    JOptionPane.showMessageDialog(null, desplegarDatos(numeros2, "Segunda matriz"));
+    JOptionPane.showMessageDialog(null, desplegarDatos(numeros2, "Segunda matriz \n"));
 
     // Sumar los datos de dos arreglos
     suma(numeros1, numeros2);
 
     // Desplegar los datos del arreglo
-    JOptionPane.showMessageDialog(null, desplegarDatos(resultado, "Resultado"));
+    JOptionPane.showMessageDialog(null, desplegarDatos(resultado, "Resultado \n"));
 
   }
 
