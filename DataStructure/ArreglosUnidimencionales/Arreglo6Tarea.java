@@ -1,6 +1,6 @@
 import javax.swing.JOptionPane;
 
-public class Arreglo5
+public class Arreglo6Tarea
 {
     private String nombre;
     private String nombres[];
@@ -88,7 +88,7 @@ public class Arreglo5
 
     public static void main(String args[])
     {
-        Arreglo5 objeto = new Arreglo5();
+        Arreglo6Tarea objeto = new Arreglo6Tarea();
 
         objeto.principal(args);
     }
