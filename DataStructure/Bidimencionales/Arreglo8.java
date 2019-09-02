@@ -96,7 +96,6 @@ public class Arreglo8{
       multiplicacion(numeros1, numeros2);
       JOptionPane.showMessageDialog(null, desplegarDatos(resultado, "Resultado \n", renglones, renglones));
     }
-
   }
 
   public static void main(String[] args) {
