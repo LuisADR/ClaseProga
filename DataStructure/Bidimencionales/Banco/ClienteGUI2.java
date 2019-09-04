@@ -129,6 +129,15 @@ public class ClienteGUI2 extends JFrame implements ActionListener
             taDatos.setText(datos);
         }
 
+        if(e.getSource() == bDatosArchArregloObj)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultarClientes();
+            //datos="Consultar datos del archivo";
+            // 2. Desplegar datos
+            taDatos.setText(datos);
+        }
+
         if(e.getSource() == bSalir)
         {
             System.exit(0);

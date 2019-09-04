@@ -4,6 +4,31 @@ public class BancoAD {
 
 	private BufferedReader archivoIn;
 	private PrintWriter archivoOut;
+	private int noClientes;
+
+	public BancoAD (){
+		String datos = "";
+		try {
+
+			//1. Abrir el archivo
+			archivoIn = new PrintWriter(new FileWriter("Clientes.txt", true));
+
+			//2.Escribir o almacenar los datos en el archivo
+			while(archivoIn.ready()){
+				archivoIn.readLine();
+
+				noClientes++;
+			} catch(FileNotFoundException fnfe){
+            System.out.print("Error: "+fnfe);
+      } catch(IOException ioe){
+          System.out.print("Error: "+ioe);
+      }
+
+			//3. Cerrar el archivo
+			archivoIn.close();
+			System.out.println("Strings en el archivo: " + noClientes);
+		}
+	}
 
 	public String capturar (String datos) {
 
@@ -19,15 +44,14 @@ public class BancoAD {
 
 			//3. Cerrar el archivo
 			archivoOut.close();
+			noClientes++;
 			resultado="Datos capturas: "+ datos;
-		}
 
-
-		catch(IOException ioe) {
+		}	catch(IOException ioe) {
 			resultado= "Error: "+ ioe;
 		}
 
-		return "Datos a capturar: "+datos;
+		return resultado;
 	}
 
 	public String consultarClientes() {
@@ -56,5 +80,21 @@ public class BancoAD {
 		}
 
 		return datos;
+	}
+
+	public String datosArchArreglos (){
+
+		String respuesta = "";
+		int i=0;
+
+		try{
+
+		} catch (FileNotFoundException fnfe){
+			respuesta = "Error: " + fnfe;
+		} catch (IOException ioe){
+			respuesta = "Error: " + fnfe;
+		}
+
+		return respuesta;
 	}
 }
