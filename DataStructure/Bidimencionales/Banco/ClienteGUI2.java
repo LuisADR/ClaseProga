@@ -16,6 +16,9 @@ public class ClienteGUI2 extends JFrame implements ActionListener
 {
     private JTextField tfCuenta, tfNombre, tfTipo, tfSaldo;
     private JButton    bCapturar, bConsultar, bSalir;
+    private JButton    bConsultarArreglo, bDatosArreglo;
+    private JButton    bConsultarArregloObj, bDatosArregloObj;
+    private JButton    bConsultarTC, bConsultarTCObj;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
 
@@ -30,8 +33,19 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         tfNombre = new JTextField();
         tfTipo   = new JTextField();
         tfSaldo  = new JTextField();
+
         bCapturar = new JButton("Capturar datos");
         bConsultar = new JButton("Consultar Clientes");
+
+        bDatosArreglo = new JButton("Datos-->Arreglo");
+        bConsultarArreglo = new JButton("Consultar arreglo");
+
+        bDatosArregloObj = new JButton("Datos Archivo-->Arreglo Obj");
+        bConsultarArregloObj = new JButton("Consultar Arreglo--Obj");
+
+        bConsultarTC= new JButton("Consultar Tipo de Cuenta");
+        bConsultarTCObj= new JButton("Consultar Tipo de Cuenta->Objeto");
+
         bSalir = new JButton("Exit");
         panel1 = new JPanel();
         panel2 = new JPanel();
@@ -42,8 +56,17 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bConsultar.addActionListener(this);
         bSalir.addActionListener(this);
 
+        bDatosArreglo.addActionListener(this);
+        bConsultarArreglo.addActionListener(this);
+
+        bDatosArregloObj.addActionListener(this);
+        bConsultarArregloObj.addActionListener(this);
+
+        bConsultarTC.addActionListener(this);
+        bConsultarTCObj.addActionListener(this);
+
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(6,2));
+        panel1.setLayout(new GridLayout(9,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -55,8 +78,19 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         panel1.add(tfTipo);
         panel1.add(new JLabel("SALDO"));
         panel1.add(tfSaldo);
+
         panel1.add(bCapturar);
         panel1.add(bConsultar);
+
+        panel1.add(bDatosArreglo);
+        panel1.add(bConsultarArreglo);
+
+        panel1.add(bDatosArregloObj);
+        panel1.add(bConsultarArregloObj);
+
+        panel1.add(bConsultarTC);
+        panel1.add(bConsultarTCObj);
+
         panel1.add(bSalir);
 
         panel2.add(panel1);
@@ -66,7 +100,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
 
         // 4. Adicionar el panel2 al JFrame y hacerlo visible
         add(panel2);
-        setSize(400,400);
+        setSize(600,450);
         setVisible(true);
     }
 
@@ -129,13 +163,44 @@ public class ClienteGUI2 extends JFrame implements ActionListener
             taDatos.setText(datos);
         }
 
-        if(e.getSource() == bDatosArchArregloObj)
-        {
+        if(e.getSource() == bDatosArreglo){
+
             // 1. Realizar consulta de clientes
-            datos = bancoad.consultarClientes();
-            //datos="Consultar datos del archivo";
+            respuesta = bancoad.datosArchArreglos();
+            // 2. Desplegar datos
+            taDatos.setText(respuesta);
+        }
+
+        if(e.getSource() == bConsultarArreglo){
+
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultarArreglo();
             // 2. Desplegar datos
             taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bDatosArregloObj){
+          respuesta = bancoad.datosArchArregloObj();
+
+          taDatos.setText(respuesta);
+        }
+
+        if(e.getSource() == bConsultarArregloObj){
+          datos = bancoad.consultarArregloObj();
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarTC){
+          datos = bancoad.consultarTC(tfTipo.getText());
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarTCObj){
+          datos = bancoad.consultarTCObj(tfTipo.getText());
+
+          taDatos.setText(datos);
         }
 
         if(e.getSource() == bSalir)

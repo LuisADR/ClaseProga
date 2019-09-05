@@ -55,7 +55,7 @@ public class ClienteDP {
 		this.saldo = saldo;
 	}
 
-	public String toString(int saldo){
+	public String toString(){
 		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + this.saldo;
 	}
 }
