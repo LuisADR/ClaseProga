@@ -230,25 +230,25 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         }
 
         if(e.getSource() == bConsultarCuenta){
-          datos = bancoad.consultarCuenta(tfCuenta.getText(), 0);
+          datos = bancoad.consultarCuenta(tfCuenta.getText());
 
           taDatos.setText(datos);
         }
 
         if(e.getSource() == bConsultarCuentaObj){
-          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), 0);
+          datos = bancoad.consultarCuentaObj(tfCuenta.getText());
 
           taDatos.setText(datos);
         }
 
         if(e.getSource() == bDeposito){
-          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), Integer.parseInt(JOptionPane.showInputDialog("Cantidad a depositar")));
+          datos = bancoad.depositar(tfCuenta.getText(), Integer.parseInt(JOptionPane.showInputDialog("Cantidad a depositar")));
 
           taDatos.setText(datos);
         }
 
         if(e.getSource() == bRetiro){
-          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), (-1) * Integer.parseInt(JOptionPane.showInputDialog("Cantidad a retira")));
+          datos = bancoad.retirar(tfCuenta.getText(), Integer.parseInt(JOptionPane.showInputDialog("Cantidad a retira")));
 
           taDatos.setText(datos);
         }

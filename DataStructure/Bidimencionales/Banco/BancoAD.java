@@ -6,7 +6,7 @@ public class BancoAD {
 	private String archivo = "Clientes.txt";
 	private BufferedReader archivoIn;
 	private PrintWriter archivoOut;
-	private int noClientes;
+	private int noClientes, posicion;
 
 	private String arregloString[];
 	private ClienteDP arregloObjetoDP[];
@@ -229,7 +229,7 @@ public class BancoAD {
 		return resultado;
 	}
 
-	public String consultarCuenta(String cuenta, int saldoN){
+	public String consultarCuenta(String cuenta){
 		String datos, nocta, nombre, tc;
 		int saldo;
 		String resultado = "";
@@ -271,7 +271,7 @@ public class BancoAD {
 		return resultado;
 	}
 
-	public String consultarCuentaObj(String cuenta, int saldoN){
+	public String consultarCuentaObj(String cuenta){
 		String resultado = "";
 		StringTokenizer st;
 		int i = 0;
@@ -279,31 +279,52 @@ public class BancoAD {
 		while (i < arregloObjetoDP.length) {
 			if(cuenta.equals(arregloObjetoDP[i].getNocta())){
 				resultado = arregloObjetoDP[i].toString() + "\n";
+
+				posicion = i;
+
 				break;
 			}
 			i ++;
 		}
-		if(saldoN > 0){
-			if(arregloObjetoDP[i].getTipo().equals("AHORRO") || arregloObjetoDP[i].getTipo().equals("INVERSION")){
-				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() + saldoN);
-			} else if(arregloObjetoDP[i].getTipo().equals("CREDITO") || arregloObjetoDP[i].getTipo().equals("HIPOTECA")){
-				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() - saldoN);
-			}
-			resultado = arregloObjetoDP[i].toString();
-		}
 
-		if(saldoN < 0){
-			if(arregloObjetoDP[i].getTipo().equals("HIPOTECA")){
-				resultado = "No se puede hacer retiro";
-			} else if(arregloObjetoDP[i].getTipo().equals("AHORRO") || arregloObjetoDP[i].getTipo().equals("INVERSION")){
-				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() + saldoN);
-			} else if (arregloObjetoDP[i].getTipo().equals("CREDITO")){
-				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() - saldoN);
-			}
-			resultado = resultado + "\n" + arregloObjetoDP[i].toString();
-		}
+		if (resultado.equals("")) return "No se encontro el No de cuenta";
 
-		if (resultado.equals("")) resultado = "No se encontro el No de cuenta";
+		return resultado;
+	}
+
+	public String depositar(String cuenta, int saldoN){
+
+		String resultado = "", archivoDep = "Depositos.txt", archivoAnt;
+
+		resultado = consultarCuentaObj(cuenta) + "\n";
+
+		if (posicion == 0) return "No se encontro el No de cuenta";
+
+		if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") || arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
+		} else if(arregloObjetoDP[posicion].getTipo().equals("CREDITO") || arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
+		}
+		resultado = resultado + arregloObjetoDP[posicion].toString();
+
+		return resultado;
+	}
+
+	public String retirar(String cuenta, int saldoN){
+		String resultado = "", archivoRet = "Depositos.txt", archivoAnt;
+
+		resultado = consultarCuentaObj(cuenta) + "\n";
+
+		if (posicion == 0) return "No se encontro el No de cuenta";
+
+		if(arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
+			resultado = "No se puede hacer retiro";
+		} else if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") || arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
+		} else if (arregloObjetoDP[posicion].getTipo().equals("CREDITO")){
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
+		}
+		resultado = resultado + arregloObjetoDP[posicion].toString();
 
 		return resultado;
 	}
