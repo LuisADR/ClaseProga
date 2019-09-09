@@ -35,14 +35,14 @@ public class BancoAD {
 			System.out.println("Strings en el archivo: " + noClientes);
 		}
 
-	public String capturar (String datos) {
+	public String capturar (String datos, boolean rewrite) {
 
 		String resultado="";
 
 		try {
 
 			//1. Abrir el archivo
-			archivoOut=new PrintWriter(new FileWriter(archivo, true));
+			archivoOut=new PrintWriter(new FileWriter(archivo, !rewrite));
 
 			//2.Escribir o almacenar los datos en el archivo
 			archivoOut.println(datos);
@@ -228,4 +228,99 @@ public class BancoAD {
 
 		return resultado;
 	}
+
+	public String consultarCuenta(String cuenta, int saldoN){
+		String datos, nocta, nombre, tc;
+		int saldo;
+		String resultado = "";
+		StringTokenizer st;
+
+		try {
+			//1. Abrir el archivo
+			archivoIn= new BufferedReader(new FileReader (archivo));
+
+			//2.Procesar datos
+			while(archivoIn.ready()) {
+				datos = archivoIn.readLine();
+				st = new StringTokenizer(datos, "_");
+
+				nocta = st.nextToken();
+				nombre = st.nextToken();;
+				tc = st.nextToken();;
+
+				if(nocta.equals(cuenta)){
+					resultado = datos;
+					break;
+				}
+			}
+
+			if (resultado.equals("")) resultado = "No se encontro el No de cuenta";
+
+			//3.Cerrar archivo
+			archivoIn.close();
+		}
+
+		catch(FileNotFoundException fnfe) {
+			resultado= "Error: "+ fnfe;
+		}
+
+		catch(IOException ioe) {
+			resultado= "Error : "+ioe;
+		}
+
+		return resultado;
+	}
+
+	public String consultarCuentaObj(String cuenta, int saldoN){
+		String resultado = "";
+		StringTokenizer st;
+		int i = 0;
+
+		while (i < arregloObjetoDP.length) {
+			if(cuenta.equals(arregloObjetoDP[i].getNocta())){
+				resultado = arregloObjetoDP[i].toString() + "\n";
+				break;
+			}
+			i ++;
+		}
+		if(saldoN > 0){
+			if(arregloObjetoDP[i].getTipo().equals("AHORRO") || arregloObjetoDP[i].getTipo().equals("INVERSION")){
+				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() + saldoN);
+			} else if(arregloObjetoDP[i].getTipo().equals("CREDITO") || arregloObjetoDP[i].getTipo().equals("HIPOTECA")){
+				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() - saldoN);
+			}
+			resultado = arregloObjetoDP[i].toString();
+		}
+
+		if(saldoN < 0){
+			if(arregloObjetoDP[i].getTipo().equals("HIPOTECA")){
+				resultado = "No se puede hacer retiro";
+			} else if(arregloObjetoDP[i].getTipo().equals("AHORRO") || arregloObjetoDP[i].getTipo().equals("INVERSION")){
+				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() + saldoN);
+			} else if (arregloObjetoDP[i].getTipo().equals("CREDITO")){
+				arregloObjetoDP[i].setSaldo(arregloObjetoDP[i].getSaldo() - saldoN);
+			}
+			resultado = resultado + "\n" + arregloObjetoDP[i].toString();
+		}
+
+		if (resultado.equals("")) resultado = "No se encontro el No de cuenta";
+
+		return resultado;
+	}
+
+	public String arregloObjetosDatos(){
+
+		String resultado = "";
+		if (arregloObjetoDP == null) return "No existe Arreglo de objetos";
+		boolean rewrite = true;
+
+		for (int i  = 0; i < arregloObjetoDP.length ; i++) {
+			resultado = capturar(arregloObjetoDP[i].toStringText(), rewrite);
+			rewrite = false;
+			System.out.println(resultado);
+		}
+
+		return "Datos capturados Correctamente!";
+	}
+
 }

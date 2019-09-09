@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
 
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
@@ -19,6 +20,9 @@ public class ClienteGUI2 extends JFrame implements ActionListener
     private JButton    bConsultarArreglo, bDatosArreglo;
     private JButton    bConsultarArregloObj, bDatosArregloObj;
     private JButton    bConsultarTC, bConsultarTCObj;
+    private JButton    bConsultarCuenta, bConsultarCuentaObj;
+    private JButton    bDeposito, bRetiro;
+    private JButton    barregloObjDatos;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
 
@@ -46,6 +50,14 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bConsultarTC= new JButton("Consultar Tipo de Cuenta");
         bConsultarTCObj= new JButton("Consultar Tipo de Cuenta->Objeto");
 
+        bConsultarCuenta= new JButton("Consultar No de Cuenta");
+        bConsultarCuentaObj= new JButton("Consultar No de Cuenta->Objeto");
+
+        bDeposito= new JButton("Depositar Cuenta");
+        bRetiro= new JButton("Retirar Cuenta");
+
+        barregloObjDatos = new JButton("Arreglo Obj-->Datos Archivo");
+
         bSalir = new JButton("Exit");
         panel1 = new JPanel();
         panel2 = new JPanel();
@@ -65,8 +77,15 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bConsultarTC.addActionListener(this);
         bConsultarTCObj.addActionListener(this);
 
+        bConsultarCuenta.addActionListener(this);
+        bConsultarCuentaObj.addActionListener(this);
+
+        bDeposito.addActionListener(this);
+        bRetiro.addActionListener(this);
+
+        barregloObjDatos.addActionListener(this);
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(9,2));
+        panel1.setLayout(new GridLayout(13,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -91,6 +110,13 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         panel1.add(bConsultarTC);
         panel1.add(bConsultarTCObj);
 
+        panel1.add(bConsultarCuenta);
+        panel1.add(bConsultarCuentaObj);
+
+        panel1.add(bDeposito);
+        panel1.add(bRetiro);
+
+        panel1.add(barregloObjDatos);
         panel1.add(bSalir);
 
         panel2.add(panel1);
@@ -147,7 +173,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
                 if(datos.equals("NO_NUMERICO"))
                     respuesta = "Saldo debe ser numerico...";
                 else
-                    respuesta = bancoad.capturar(datos);
+                    respuesta = bancoad.capturar(datos, false);
                     //respuesta = datos;
 
             // 3. Desplegar esultado de transaccion
@@ -201,6 +227,37 @@ public class ClienteGUI2 extends JFrame implements ActionListener
           datos = bancoad.consultarTCObj(tfTipo.getText());
 
           taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarCuenta){
+          datos = bancoad.consultarCuenta(tfCuenta.getText(), 0);
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarCuentaObj){
+          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), 0);
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bDeposito){
+          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), Integer.parseInt(JOptionPane.showInputDialog("Cantidad a depositar")));
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bRetiro){
+          datos = bancoad.consultarCuentaObj(tfCuenta.getText(), (-1) * Integer.parseInt(JOptionPane.showInputDialog("Cantidad a retira")));
+
+          taDatos.setText(datos);
+        }
+
+        if(e.getSource() == barregloObjDatos)
+        {
+            datos = bancoad.arregloObjetosDatos();
+
+            taDatos.setText(datos);
         }
 
         if(e.getSource() == bSalir)

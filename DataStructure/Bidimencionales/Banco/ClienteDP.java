@@ -58,4 +58,8 @@ public class ClienteDP {
 	public String toString(){
 		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + this.saldo;
 	}
+
+	public String toStringText(){
+	return this.nocta + "_" + this.nombre + "_" + this.tipo + "_" + this.saldo;
+	}
 }
