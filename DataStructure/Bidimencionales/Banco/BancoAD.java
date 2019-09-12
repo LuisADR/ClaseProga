@@ -3,7 +3,8 @@ import java.util.StringTokenizer;
 
 public class BancoAD {
 
-	private String archivo = "Clientes.txt";
+	private String archivo = "Clientes.txt", archivoDep = "Depositos.txt",
+								 archivoCli = "Clientes.txt", archivoRet = "Retiros.txt";
 	private BufferedReader archivoIn;
 	private PrintWriter archivoOut;
 	private int noClientes, posicion;
@@ -294,38 +295,118 @@ public class BancoAD {
 
 	public String depositar(String cuenta, int saldoN){
 
-		String resultado = "", archivoDep = "Depositos.txt", archivoAnt;
+		String resultado = "", deposito = "";
+		posicion = -1;
 
+		//Realizamos la consulta del Nocta y añadimos el saldo anterior
 		resultado = consultarCuentaObj(cuenta) + "\n";
 
-		if (posicion == 0) return "No se encontro el No de cuenta";
+		//Si no se encuentra Nocta, terminamos el proceso
+		if (posicion == -1) return "No se encontro el No de cuenta";
 
-		if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") || arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
+		// Cambiar archivo a Retiro
+		archivo = archivoDep;
+
+		//Acciones para Clientes de tipo Ahorro, Inversion
+		if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") ||
+			 arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
+
+			//Obtenemos Nocta, nombre, saldo y deposito
+ 			deposito = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
+ 							   arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
+
+			//Realizamos la operacion
 			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
-		} else if(arregloObjetoDP[posicion].getTipo().equals("CREDITO") || arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
-			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
+
+			//Añadimos el nuevo saldo
+			deposito = deposito + "_" + arregloObjetoDP[posicion].getSaldo();
+
 		}
+
+		else if(arregloObjetoDP[posicion].getTipo().equals("CREDITO") ||
+						arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
+
+			//Obtenemos Nocta, nombre, saldo y deposito
+ 			deposito = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
+ 							   arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
+
+			//Realizamos la operacion
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
+
+			//Añadimos el nuevo saldo
+			deposito = deposito + "_" + arregloObjetoDP[posicion].getSaldo();
+
+		}
+
+		//Almacenamos los datos en el archivo
+		capturar(deposito, false);
+
+		//Añadimos el nuevo saldo de la operacion
 		resultado = resultado + arregloObjetoDP[posicion].toString();
 
+		// Cambiar archivo a Cliente
+		archivo = archivoCli;
+
+		//Regresamos el saldo anterior y el saldo nuevo
 		return resultado;
 	}
 
 	public String retirar(String cuenta, int saldoN){
-		String resultado = "", archivoRet = "Depositos.txt", archivoAnt;
+		String resultado = "", retiro = "";
+		posicion = -1;
 
+		//Realizamos la consulta del Nocta y añadimos el saldo anterior
 		resultado = consultarCuentaObj(cuenta) + "\n";
 
-		if (posicion == 0) return "No se encontro el No de cuenta";
+		//Si no se encontro Nocta, terminar el proceso
+		if (posicion == -1) return "No se encontro el No de cuenta";
+
+		// Cambiar archivo a Retiro
+		archivo = archivoRet;
 
 		if(arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
 			resultado = "No se puede hacer retiro";
-		} else if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") || arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
-			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
-		} else if (arregloObjetoDP[posicion].getTipo().equals("CREDITO")){
-			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
 		}
+
+		//Accion para Clientes de tipo Ahorro e Inversion
+		else if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") ||
+						arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
+
+			//Obtenemos Nocta, nombre, saldo y retiro
+			retiro = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
+							 arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
+
+			//Realizamos la operacion
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
+
+			//Añadimos el nuevo saldo
+			retiro = retiro + "_" + arregloObjetoDP[posicion].getSaldo();
+		}
+
+		//Accion para archivos de tipo Credito
+		else if (arregloObjetoDP[posicion].getTipo().equals("CREDITO")){
+
+			//Obtenemos Nocta, nombre, saldo y retiro
+			retiro = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
+							 arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
+
+			//Realizamos la operacion
+			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
+
+			//Añadimos el nuevo saldo
+			retiro = retiro + "_" + arregloObjetoDP[posicion].getSaldo();
+		}
+
+		//Añadimos el nuevo saldo de la operacion
 		resultado = resultado + arregloObjetoDP[posicion].toString();
 
+		//Almacenamos los datos en el archivo
+		capturar(retiro, false);
+
+		// Cambiar archivo a Cliente
+		archivo = archivoCli;
+
+		//Regresamos el saldo anterior y el saldo nuevo
 		return resultado;
 	}
 
