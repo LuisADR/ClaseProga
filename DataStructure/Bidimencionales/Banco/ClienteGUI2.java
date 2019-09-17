@@ -13,6 +13,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class ClienteGUI2 extends JFrame implements ActionListener
 {
     private JTextField tfCuenta, tfNombre, tfTipo, tfSaldo;
@@ -22,9 +26,13 @@ public class ClienteGUI2 extends JFrame implements ActionListener
     private JButton    bConsultarTC, bConsultarTCObj;
     private JButton    bConsultarCuenta, bConsultarCuentaObj;
     private JButton    bDeposito, bRetiro;
+    private JButton    bConsultarRet, bConsultarDep;
     private JButton    barregloObjDatos;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
+
+    private DateFormat dateFormat;
+    private Date date;
 
     private BancoAD bancoad= new BancoAD();
 
@@ -56,12 +64,17 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bDeposito= new JButton("Depositar Cuenta");
         bRetiro= new JButton("Retirar Cuenta");
 
-        barregloObjDatos = new JButton("Arreglo Obj-->Datos Archivo");
+        bConsultarDep = new JButton("Consultar Depositos");
+        bConsultarRet = new JButton("Consultar Retiros");
 
+        barregloObjDatos = new JButton("Arreglo Obj-->Datos Archivo");
         bSalir = new JButton("Exit");
+
         panel1 = new JPanel();
         panel2 = new JPanel();
         taDatos = new JTextArea(10,30);
+
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
 
         // Adicionar addActionListener a lo JButtons
         bCapturar.addActionListener(this);
@@ -83,9 +96,12 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bDeposito.addActionListener(this);
         bRetiro.addActionListener(this);
 
+        bConsultarDep.addActionListener(this);
+        bConsultarRet.addActionListener(this);
+
         barregloObjDatos.addActionListener(this);
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(13,2));
+        panel1.setLayout(new GridLayout(14,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -117,6 +133,9 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         panel1.add(bRetiro);
 
         panel1.add(barregloObjDatos);
+        panel1.add(bConsultarDep);
+
+        panel1.add(bConsultarRet);
         panel1.add(bSalir);
 
         panel2.add(panel1);
@@ -126,12 +145,14 @@ public class ClienteGUI2 extends JFrame implements ActionListener
 
         // 4. Adicionar el panel2 al JFrame y hacerlo visible
         add(panel2);
-        setSize(600,450);
+        setSize(600,650);
         setVisible(true);
     }
 
     private String obtenerDatos()
     {
+
+        date = new Date();
         String datos;
 
         String nocta  = tfCuenta.getText();
@@ -146,7 +167,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
             try
             {
                 int n = Integer.parseInt(saldo);
-                datos = nocta+"_"+nombre+"_"+tipo+"_"+saldo;
+                datos = nocta+"_"+nombre+"_"+tipo+"_"+saldo+"_"+dateFormat.format(date);
             }
             catch(NumberFormatException nfe)
             {
@@ -256,6 +277,20 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         if(e.getSource() == barregloObjDatos)
         {
             datos = bancoad.arregloObjetosDatos();
+
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarDep)
+        {
+            datos = bancoad.consultarDep();
+
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarRet)
+        {
+            datos = bancoad.consultarRet();
 
             taDatos.setText(datos);
         }

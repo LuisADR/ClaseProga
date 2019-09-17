@@ -1,9 +1,18 @@
 import java.util.StringTokenizer;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.lang.Math;
+
 
 public class ClienteDP {
 	// Atributos, variables de instancia o de clase
-	private String nocta, nombre, tipo;
+	private String nocta, nombre, tipo, dia, hora;
 	private int saldo;
+
+	private DateFormat dateFormat;
+	private Date date;
 
 	// Constructores
 	public ClienteDP(){
@@ -11,6 +20,10 @@ public class ClienteDP {
 			nombre = "";
 			tipo = "";
 			saldo = 0;
+			dia = "";
+			hora = "";
+
+			dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
 	}
 
 	public ClienteDP(String datos){
@@ -19,6 +32,10 @@ public class ClienteDP {
 		nombre = st.nextToken();;
 		tipo = st.nextToken();;
 		saldo = Integer.parseInt(st.nextToken());
+		dia = st.nextToken();
+		hora = st.nextToken();
+
+		dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
 	}
 
 
@@ -39,6 +56,10 @@ public class ClienteDP {
 		return this.saldo;
 	}
 
+	public String getDia(){
+		return this.dia;
+	}
+
 	public void setNocta(String cta){
 		this.nocta = cta;
 	}
@@ -56,10 +77,19 @@ public class ClienteDP {
 	}
 
 	public String toString(){
-		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + this.saldo;
+		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + this.saldo + "*" +
+					 this.dia + "*" + this.hora;
 	}
 
 	public String toStringText(){
-	return this.nocta + "_" + this.nombre + "_" + this.tipo + "_" + this.saldo;
+		return this.nocta + "_" + this.nombre + "_" + this.tipo + "_" + this.saldo + "_" +
+			 		 this.dia + "_" + this.hora;
+	}
+
+	public String toStringOperacion(int cantidad){
+		date = new Date();
+
+		return this.nocta + "_" + this.nombre + "_" + (this.saldo + cantidad) + "_" + Math.abs(cantidad) + "_"  + this.saldo +
+	 			 	 "_" + dateFormat.format(date);
 	}
 }

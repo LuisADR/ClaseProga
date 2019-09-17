@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import java.util.StringTokenizer;
 
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
@@ -99,7 +100,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
 
     public void actionPerformed(ActionEvent e)
     {
-        String datos, respuesta;
+        String datos = "", respuesta = "";
 
         if(e.getSource() == bCapturar)
         {
@@ -124,7 +125,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         {
             // 1. Realizar consulta de clientes
             datos = bancoad.consultarClientes();
-            //datos="Consultar datos del archivo";
+
             // 2. Desplegar datos
             taDatos.setText(datos);
         }

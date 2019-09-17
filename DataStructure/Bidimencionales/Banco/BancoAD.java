@@ -1,5 +1,8 @@
 import java.io.*;
 import java.util.StringTokenizer;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class BancoAD {
 
@@ -14,6 +17,7 @@ public class BancoAD {
 
 	public BancoAD (){
 		String datos = "";
+
 		try {
 
 			//1. Abrir el archivo
@@ -78,7 +82,7 @@ public class BancoAD {
 		}
 
 		catch(FileNotFoundException fnfe) {
-			datos= "Error: "+ fnfe;
+			datos= "Archivo no entontrado";
 		}
 
 		catch(IOException ioe) {
@@ -311,30 +315,22 @@ public class BancoAD {
 		if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") ||
 			 arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
 
-			//Obtenemos Nocta, nombre, saldo y deposito
- 			deposito = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
- 							   arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
-
 			//Realizamos la operacion
 			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
 
-			//Añadimos el nuevo saldo
-			deposito = deposito + "_" + arregloObjetoDP[posicion].getSaldo();
+			//Obtenemos los valores
+			deposito = arregloObjetoDP[posicion].toStringOperacion(-saldoN);
 
 		}
 
 		else if(arregloObjetoDP[posicion].getTipo().equals("CREDITO") ||
 						arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
 
-			//Obtenemos Nocta, nombre, saldo y deposito
- 			deposito = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
- 							   arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
-
 			//Realizamos la operacion
 			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
 
-			//Añadimos el nuevo saldo
-			deposito = deposito + "_" + arregloObjetoDP[posicion].getSaldo();
+			//Obtenemos los valores
+			deposito = arregloObjetoDP[posicion].toStringOperacion(saldoN);
 
 		}
 
@@ -365,36 +361,28 @@ public class BancoAD {
 		archivo = archivoRet;
 
 		if(arregloObjetoDP[posicion].getTipo().equals("HIPOTECA")){
-			resultado = "No se puede hacer retiro";
+			resultado = "No se puede hacer retiro ";
 		}
 
 		//Accion para Clientes de tipo Ahorro e Inversion
 		else if(arregloObjetoDP[posicion].getTipo().equals("AHORRO") ||
 						arregloObjetoDP[posicion].getTipo().equals("INVERSION")){
 
-			//Obtenemos Nocta, nombre, saldo y retiro
-			retiro = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
-							 arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
-
 			//Realizamos la operacion
 			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() - saldoN);
 
-			//Añadimos el nuevo saldo
-			retiro = retiro + "_" + arregloObjetoDP[posicion].getSaldo();
+			//Obtenemos los valores
+			retiro = arregloObjetoDP[posicion].toStringOperacion(-saldoN);
 		}
 
 		//Accion para archivos de tipo Credito
 		else if (arregloObjetoDP[posicion].getTipo().equals("CREDITO")){
 
-			//Obtenemos Nocta, nombre, saldo y retiro
-			retiro = arregloObjetoDP[posicion].getNocta() + "_" + arregloObjetoDP[posicion].getNombre() + "_" +
-							 arregloObjetoDP[posicion].getSaldo() + "_" + saldoN;
-
 			//Realizamos la operacion
 			arregloObjetoDP[posicion].setSaldo(arregloObjetoDP[posicion].getSaldo() + saldoN);
 
-			//Añadimos el nuevo saldo
-			retiro = retiro + "_" + arregloObjetoDP[posicion].getSaldo();
+			//Obtenemos los valores
+			retiro = arregloObjetoDP[posicion].toStringOperacion(saldoN);
 		}
 
 		//Añadimos el nuevo saldo de la operacion
@@ -423,6 +411,30 @@ public class BancoAD {
 		}
 
 		return "Datos capturados Correctamente!";
+	}
+
+	public String consultarDep(){
+		//Cambiamos el archivo a leer
+		archivo = archivoDep;
+
+		String dato = consultarClientes();
+
+		//Regresamos al archivo cliente
+		archivo = archivoCli;
+
+		return dato;
+	}
+
+	public String consultarRet(){
+		//Cambiamos el archivo a leer
+		archivo = archivoRet;
+
+		String dato = consultarClientes();
+
+		//Regresamos al archivo cliente
+		archivo = archivoCli;
+
+		return dato;
 	}
 
 }
