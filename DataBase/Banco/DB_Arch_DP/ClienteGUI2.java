@@ -13,12 +13,21 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class ClienteGUI2 extends JFrame implements ActionListener
 {
     private JTextField tfCuenta, tfNombre, tfTipo, tfSaldo;
     private JButton    bCapturar, bConsultar, bSalir;
+    private JButton    bConsultarNocta, bConsultarTipo;
+    private JButton    bDeposito, bRetiro, bCancelarTrans;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
+
+    private DateFormat dateFormat;
+    private Date date;
 
     private BancoADjdbc bancoad= new BancoADjdbc();
 
@@ -31,20 +40,38 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         tfNombre = new JTextField();
         tfTipo   = new JTextField();
         tfSaldo  = new JTextField();
+
         bCapturar = new JButton("Capturar datos");
         bConsultar = new JButton("Consultar Clientes");
+
+        bConsultarNocta = new JButton("Consultar Cuenta");
+        bConsultarTipo = new JButton("Consultar Tipo");
+
+        bDeposito = new JButton("Deposito");
+        bRetiro = new JButton("Retiro");
+        bCancelarTrans = new JButton("Cancelar Transaccion");
+
+        dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
+
         bSalir = new JButton("Exit");
         panel1 = new JPanel();
         panel2 = new JPanel();
-        taDatos = new JTextArea(10,30);
+        taDatos = new JTextArea(10,35);
 
         // Adicionar addActionListener a lo JButtons
         bCapturar.addActionListener(this);
         bConsultar.addActionListener(this);
         bSalir.addActionListener(this);
 
+        bConsultarTipo.addActionListener(this);
+        bConsultarNocta.addActionListener(this);
+
+        bDeposito.addActionListener(this);
+        bRetiro.addActionListener(this);
+        bCancelarTrans.addActionListener(this);
+
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(6,2));
+        panel1.setLayout(new GridLayout(8,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -56,23 +83,38 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         panel1.add(tfTipo);
         panel1.add(new JLabel("SALDO"));
         panel1.add(tfSaldo);
+
         panel1.add(bCapturar);
         panel1.add(bConsultar);
+
+        panel1.add(bConsultarNocta);
+        panel1.add(bConsultarTipo);
+
+        panel1.add(bDeposito);
+        panel1.add(bRetiro);
+
+        panel1.add(bCancelarTrans);
         panel1.add(bSalir);
 
         panel2.add(panel1);
         panel2.add(new JScrollPane(taDatos));
 
-
+        //Desabilitamos los botones
+        bDeposito.setEnabled(false);
+        bRetiro.setEnabled(false);
+        bCancelarTrans.setEnabled(false);
 
         // 4. Adicionar el panel2 al JFrame y hacerlo visible
         add(panel2);
-        setSize(400,400);
+        setSize(450,500);
         setVisible(true);
+
+
     }
 
     private String obtenerDatos()
     {
+        date = new Date();
         String datos;
 
         String nocta  = tfCuenta.getText();
@@ -87,7 +129,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
             try
             {
                 int n = Integer.parseInt(saldo);
-                datos = nocta+"_"+nombre+"_"+tipo+"_"+saldo;
+                datos = nocta+"_"+nombre+"_"+tipo+"_"+saldo+"_"+dateFormat.format(date);
             }
             catch(NumberFormatException nfe)
             {
@@ -96,6 +138,18 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         }
 
         return datos;
+    }
+
+    private void enableButtons(boolean action){
+
+      bCapturar.setEnabled(!action);
+      bConsultar.setEnabled(!action);
+      bConsultarNocta.setEnabled(!action);
+      bConsultarTipo.setEnabled(!action);
+
+      bDeposito.setEnabled(action);
+      bRetiro.setEnabled(action);
+      bCancelarTrans.setEnabled(action);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -128,6 +182,33 @@ public class ClienteGUI2 extends JFrame implements ActionListener
 
             // 2. Desplegar datos
             taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarNocta)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultarNocta(tfCuenta.getText());
+            System.out.print(datos);
+            if (!datos.equals("NULL")) enableButtons(true);
+            if (datos.equals("NULL")) datos = "No se encontro el No de cuenta";
+
+            // 2. Desplegar datos
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarTipo)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultarTipo(tfTipo.getText());
+
+            // 2. Desplegar datos
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bCancelarTrans)
+        {
+            //Desabilitamos los botones
+            enableButtons(false);
         }
 
         if(e.getSource() == bSalir)

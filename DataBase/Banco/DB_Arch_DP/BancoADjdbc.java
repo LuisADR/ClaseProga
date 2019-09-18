@@ -57,6 +57,81 @@ public class BancoADjdbc {
 				clientedp.setNombre(tr.getString("nombre"));
 				clientedp.setTipo(tr.getString("tipo"));
 				clientedp.setSaldo(Float.parseFloat(tr.getString("saldo")));
+				clientedp.setFecha(tr.getString("fecha"));
+				clientedp.setHora(tr.getString("hora"));
+
+				datos = datos + clientedp.toString() + "\n";
+			}
+
+			//Cerramos la Conexion
+			statement.close();
+			System.out.println(strQuery);
+		} catch(SQLException ioe) {
+			datos = "Error: "+ ioe;
+		}
+
+		System.out.println(resultado);
+		return datos;
+	}
+
+	public String consultarNocta(String cuenta){
+		String datos = "NULL";
+		String strQuery = "";
+		ResultSet tr;
+		String resultado ="";
+
+		strQuery = "SELECT * FROM cliente WHERE nocta = " + cuenta;
+
+		clientedp = new ClienteDP();
+
+		try {
+			//Abrir la DB
+			statement = conexion.createStatement();
+
+			tr = statement.executeQuery(strQuery);
+
+			while(tr.next()){
+				clientedp.setNocta(tr.getString("nocta"));
+				clientedp.setNombre(tr.getString("nombre"));
+				clientedp.setTipo(tr.getString("tipo"));
+				clientedp.setSaldo(Float.parseFloat(tr.getString("saldo")));
+				clientedp.setFecha(tr.getString("fecha"));
+				clientedp.setHora(tr.getString("hora"));
+
+				datos =  clientedp.toString() + "\n";
+			}
+
+			//Cerramos la Conexion
+			statement.close();
+			System.out.println(strQuery);
+		} catch(SQLException ioe) {
+			System.out.println(ioe);
+		}
+
+		System.out.println(resultado);
+		return datos;
+	}
+
+	public String consultarTipo(String tipo){
+		String datos = "";
+		String strQuery = "";
+		ResultSet tr;
+		String resultado ="";
+
+		strQuery = "SELECT * FROM cliente WHERE tipo = '" + tipo + "'";
+		System.out.println(strQuery);
+		clientedp = new ClienteDP();
+
+		try {
+			//Abrir la DB
+			statement = conexion.createStatement();
+
+			tr = statement.executeQuery(strQuery);
+			while(tr.next()){
+				clientedp.setNocta(tr.getString("nocta"));
+				clientedp.setNombre(tr.getString("nombre"));
+				clientedp.setTipo(tr.getString("tipo"));
+				clientedp.setSaldo(Float.parseFloat(tr.getString("saldo")));
 
 				datos = datos + clientedp.toString() + "\n";
 			}
@@ -82,10 +157,14 @@ public class BancoADjdbc {
 		try {
 
 			System.out.println(strInsert);
+
+			//Creamos la conexion
 			statement =conexion.createStatement();
 
+			//Realizamos el update
 			statement.executeUpdate(strInsert);
 
+			//Cerramos la conexion
 			statement.close();
 
 			System.out.println(clientedp.toStringSQL());
