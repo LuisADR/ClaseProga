@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JOptionPane;
+
 import java.util.StringTokenizer;
 
 import java.awt.GridLayout;
@@ -22,6 +24,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
     private JTextField tfCuenta, tfNombre, tfTipo, tfSaldo;
     private JButton    bCapturar, bConsultar, bSalir;
     private JButton    bConsultarNocta, bConsultarTipo;
+    private JButton    bConsultarRet, bConsultarDep;
     private JButton    bDeposito, bRetiro, bCancelarTrans;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
@@ -71,7 +74,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bCancelarTrans.addActionListener(this);
 
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(8,2));
+        panel1.setLayout(new GridLayout(9,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -168,7 +171,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
                 if(datos.equals("NO_NUMERICO"))
                     respuesta = "Saldo debe ser numerico...";
                 else
-                    respuesta = bancoad.capturar(datos);
+                    respuesta = bancoad.capturar("cliente", datos);
                     //respuesta = datos;
 
             // 3. Desplegar esultado de transaccion
@@ -209,6 +212,24 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         {
             //Desabilitamos los botones
             enableButtons(false);
+        }
+
+        if(e.getSource() == bDeposito)
+        {
+          datos = bancoad.depositar(Float.parseFloat(JOptionPane.showInputDialog("Cantidad a depositar")));
+
+          taDatos.setText(datos);
+
+          enableButtons(true);
+        }
+
+        if(e.getSource() == bRetiro)
+        {
+          datos = bancoad.retiro(Float.parseFloat(JOptionPane.showInputDialog("Cantidad a retirar")));
+
+          taDatos.setText(datos);
+
+          enableButtons(true);
         }
 
         if(e.getSource() == bSalir)

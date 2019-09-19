@@ -1,9 +1,18 @@
 import java.util.StringTokenizer;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
+import java.lang.Math;
+
 public class ClienteDP {
 	// Atributos, variables de instancia o de clase
 	private String nocta, nombre, tipo, fecha, hora;
-	private float saldo;
+	private float saldo, operacion;
+
+	private DateFormat dateFormat, horaFormat;
+	private Date date;
 
 	// Constructores
 	public ClienteDP(){
@@ -13,6 +22,10 @@ public class ClienteDP {
 			saldo = 0;
 			fecha= "";
 			hora = "";
+			operacion = 0;
+
+			dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			horaFormat = new SimpleDateFormat("HH:mm:ss");
 	}
 
 	public ClienteDP(String datos){
@@ -23,6 +36,10 @@ public class ClienteDP {
 		saldo = Float.parseFloat(st.nextToken());
 		fecha = st.nextToken();
 		hora = st.nextToken();
+		operacion = 0;
+
+		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		horaFormat = new SimpleDateFormat("HH:mm:ss");
 	}
 
 
@@ -51,6 +68,10 @@ public class ClienteDP {
 		return this.hora;
 	}
 
+	public float getOperacion(){
+		return this.operacion;
+	}
+
 	public void setNocta(String cta){
 		this.nocta = cta;
 	}
@@ -75,13 +96,25 @@ public class ClienteDP {
 		this.hora = hora;
 	}
 
+	public void setOperacion(float saldo){
+		this.operacion = saldo;
+	}
+
 	public String toString(){
 		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + String.format("%.2f", this.saldo) +
 					 "*" + this.fecha + "*" + this.hora;
 	}
 
 	public String toStringSQL(){
-		return "'" + this.nocta + "', '" + this.nombre + "', '" + this.tipo + "', '" + this.saldo + "', '" +
+		return "'" + this.nocta + "', '" + this.nombre + "', '" + this.tipo + "', '" + String.format("%.2f", this.saldo) + "', '" +
 					 this.fecha + "', '" + this.hora + "'";
+	}
+
+	public String toStringOperacion(){
+		date = new Date();
+
+		return "'" + this.nocta + "', '" + this.nombre + "', '" + String.format("%.2f", this.saldo - this.operacion) + "', '" +
+		String.format("%.2f", Math.abs(this.operacion)) + "', '" + String.format("%.2f",this.saldo) + "', '" + 
+		dateFormat.format(date) + "', '" + horaFormat.format(date) + "'";
 	}
 }

@@ -147,12 +147,18 @@ public class BancoADjdbc {
 		return datos;
 	}
 
-	public String capturar(String datos){
+	public String capturar(String tabla, String datos){
 		String status = "";
+		String strInsert = "";
 
-		clientedp = new ClienteDP(datos);
+		if (tabla.equals("cliente")){
+				clientedp = new ClienteDP(datos);
+			 	strInsert = "INSERT INTO cliente VALUES("+ clientedp.toStringSQL() +")";
+		 }
 
-		String strInsert = "INSERT INTO cliente VALUES("+ clientedp.toStringSQL() +")";
+		if (tabla.equals("depositos") || tabla.equals("retiros")) {
+			strInsert = "INSERT INTO " + tabla + " VALUES("+ clientedp.toStringOperacion() +")";
+		}
 
 		try {
 
@@ -175,5 +181,81 @@ public class BancoADjdbc {
 		}
 
 		return status;
+	}
+
+	public String updateSaldo(){
+		String strUpdate = "";
+		String status = "";
+
+		strUpdate = "UPDATE cliente SET saldo = " + clientedp.getSaldo() + " WHERE nocta = " + clientedp.getNocta();
+
+		try {
+			statement = conexion.createStatement();
+
+			statement.executeUpdate(strUpdate);
+
+			statement.close();
+
+			status = "Datos actualizados";
+
+		} catch(SQLException ioe) {
+			status = "Error al aztualizar";
+		}
+
+		return status;
+	}
+
+	public String depositar(float cantidad){
+		String datos = "";
+		float saldo;
+
+		if(clientedp.getTipo().equals("HIPOTECA") || clientedp.getTipo().equals("CREDITO")){
+			clientedp.setOperacion(-cantidad);
+			saldo = clientedp.getSaldo() - cantidad;
+
+			clientedp.setSaldo(saldo);
+		}
+
+		if(clientedp.getTipo().equals("AHORRO") || clientedp.getTipo().equals("INVERSION")){
+			clientedp.setOperacion(cantidad);
+			saldo = clientedp.getSaldo() + cantidad;
+
+			clientedp.setSaldo(saldo);
+		}
+
+		System.out.println(clientedp.toStringOperacion());
+		datos = capturar("depositos", "");
+		datos = datos + "\n" + updateSaldo();
+
+		return datos;
+	}
+
+	public String retiro(float cantidad){
+		String datos = "";
+		float saldo;
+
+		if(clientedp.getTipo().equals("HIPOTECA")){
+			return "No se puede realizar retiros";
+		}
+
+		if(clientedp.getTipo().equals("CREDITO")){
+			clientedp.setOperacion(cantidad);
+			saldo = clientedp.getSaldo() + cantidad;
+
+			clientedp.setSaldo(saldo);
+		}
+
+		if(clientedp.getTipo().equals("AHORRO") || clientedp.getTipo().equals("INVERSION")){
+			clientedp.setOperacion(-cantidad);
+			saldo = clientedp.getSaldo() - cantidad;
+
+			clientedp.setSaldo(saldo);
+		}
+
+		System.out.println(clientedp.toStringOperacion());
+		datos = capturar("retiros", "");
+		datos = datos + "\n" + updateSaldo();
+
+		return datos;
 	}
 }
