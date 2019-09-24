@@ -101,8 +101,8 @@ public class ClienteDP {
 	}
 
 	public String toString(){
-		return this.nocta + "*" + this.nombre + "*" + this.tipo + "*" + String.format("%.2f", this.saldo) +
-					 "*" + this.fecha + "*" + this.hora;
+		return this.nocta + "_" + this.nombre + "_" + this.tipo + "_" + String.format("%.2f", this.saldo) +
+					 "_" + this.fecha + "_" + this.hora;
 	}
 
 	public String toStringSQL(){
@@ -110,11 +110,16 @@ public class ClienteDP {
 					 this.fecha + "', '" + this.hora + "'";
 	}
 
+	public String toStringTrans(){
+		return "'" + this.nocta + "', '" + this.tipo + "', '" + String.format("%.2f", this.saldo - this.operacion) + "', '" +
+					 String.format("%.2f", Math.abs(this.operacion)) + "', '" + String.format("%.2f", this.saldo) + "'";
+	}
+
 	public String toStringOperacion(){
 		date = new Date();
 
 		return "'" + this.nocta + "', '" + this.nombre + "', '" + String.format("%.2f", this.saldo - this.operacion) + "', '" +
-		String.format("%.2f", Math.abs(this.operacion)) + "', '" + String.format("%.2f",this.saldo) + "', '" + 
+		String.format("%.2f", Math.abs(this.operacion)) + "', '" + String.format("%.2f",this.saldo) + "', '" +
 		dateFormat.format(date) + "', '" + horaFormat.format(date) + "'";
 	}
 }

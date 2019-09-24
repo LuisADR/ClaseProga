@@ -8,6 +8,10 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class BancoADjdbc {
 
 	private BufferedReader archivoIn;
@@ -16,28 +20,34 @@ public class BancoADjdbc {
 	private Connection conexion;
 	private Statement statement;
 
-	private ClienteDP clientedp;
+	private DateFormat dateFormat, horaFormat;
+	private Date date;
+
 
 	public BancoADjdbc(){
-			try{
 
-				Class.forName("com.mysql.jdbc.Driver").newInstance();
-				conexion = DriverManager.getConnection("jdbc:mysql://localhost/bancomer?user=root&password=Ocma_08Jvaa");
+		dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		horaFormat = new SimpleDateFormat("HH:mm:ss");
 
-				System.out.println("Conexion Exitosa a la DB ...");
+		try{
 
-			} catch(ClassNotFoundException cnfe){
-				System.out.println("Error1 al conectar: " + cnfe);
-			} catch (InstantiationException ie){
-				System.out.println("Error2 al conectar: " + ie);
-			} catch (IllegalAccessException iae){
-			System.out.println("Error3 al conectar: " + iae);
-			} catch (SQLException sqle){
-			System.out.println("Error4 al conectar: " + sqle);
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conexion = DriverManager.getConnection("jdbc:mysql://localhost/bancomer?user=root&password=Ocma_08Jvaa");
+
+			System.out.println("Conexion Exitosa a la DB ...");
+
+		} catch(ClassNotFoundException cnfe){
+			System.out.println("Error1 al conectar: " + cnfe);
+		} catch (InstantiationException ie){
+			System.out.println("Error2 al conectar: " + ie);
+		} catch (IllegalAccessException iae){
+		System.out.println("Error3 al conectar: " + iae);
+		} catch (SQLException sqle){
+		System.out.println("Error4 al conectar: " + sqle);
 		}
 	}
 
-	public String consultarClientes(){
+	public String consultaGeneral(){
 		String datos = "";
 		String strQuery = "";
 		ResultSet tr;
@@ -61,6 +71,76 @@ public class BancoADjdbc {
 				clientedp.setHora(tr.getString("hora"));
 
 				datos = datos + clientedp.toString() + "\n";
+			}
+
+			//Cerramos la Conexion
+			statement.close();
+			System.out.println(strQuery);
+		} catch(SQLException ioe) {
+			datos = "Error: "+ ioe;
+		}
+
+		System.out.println(resultado);
+		return datos;
+	}
+
+	public String consultaDep(){
+		String datos = "";
+		String strQuery = "";
+		ResultSet tr;
+		String resultado ="";
+
+		strQuery = "SELECT * FROM depositos";
+
+		try {
+			//Abrir la DB
+			statement = conexion.createStatement();
+
+			tr = statement.executeQuery(strQuery);
+			while(tr.next()){
+				datos = datos + tr.getString("nocta") + "_";
+				datos = datos + tr.getString("nombre") + "_";
+				datos = datos + tr.getString("saldoAnt") + "_";
+				datos = datos + tr.getString("deposito") + "_";
+				datos = datos + tr.getString("saldoN") + "_";
+				datos = datos + tr.getString("fecha") + "_";
+				datos = datos + tr.getString("hora") + "\n";
+
+			}
+
+			//Cerramos la Conexion
+			statement.close();
+			System.out.println(strQuery);
+		} catch(SQLException ioe) {
+			datos = "Error: "+ ioe;
+		}
+
+		System.out.println(resultado);
+		return datos;
+	}
+
+	public String consultaRet(){
+		String datos = "";
+		String strQuery = "";
+		ResultSet tr;
+		String resultado ="";
+
+		strQuery = "SELECT * FROM retiros";
+
+		try {
+			//Abrir la DB
+			statement = conexion.createStatement();
+
+			tr = statement.executeQuery(strQuery);
+			while(tr.next()){
+				datos = datos + tr.getString("nocta") + "_";
+				datos = datos + tr.getString("nombre") + "_";
+				datos = datos + tr.getString("saldoAnt") + "_";
+				datos = datos + tr.getString("retiro") + "_";
+				datos = datos + tr.getString("saldoN") + "_";
+				datos = datos + tr.getString("fecha") + "_";
+				datos = datos + tr.getString("hora") + "\n";
+
 			}
 
 			//Cerramos la Conexion
@@ -151,14 +231,7 @@ public class BancoADjdbc {
 		String status = "";
 		String strInsert = "";
 
-		if (tabla.equals("cliente")){
-				clientedp = new ClienteDP(datos);
-			 	strInsert = "INSERT INTO cliente VALUES("+ clientedp.toStringSQL() +")";
-		 }
-
-		if (tabla.equals("depositos") || tabla.equals("retiros")) {
-			strInsert = "INSERT INTO " + tabla + " VALUES("+ clientedp.toStringOperacion() +")";
-		}
+	 	strInsert = "INSERT INTO cliente VALUES("+ datos +")";
 
 		try {
 
@@ -253,9 +326,34 @@ public class BancoADjdbc {
 		}
 
 		System.out.println(clientedp.toStringOperacion());
-		datos = capturar("retiros", "");
+		datos = capturar("retiros", toStringOperacion());
 		datos = datos + "\n" + updateSaldo();
 
 		return datos;
+	}
+
+	public String trans (String nocta, float cantidad){
+		ClienteDP retiro = new ClienteDP(clientedp.toString());
+		ClienteDP deposito = new ClienteDP(consultarNocta(nocta));
+		date = new Date();
+		String strTrans = "";
+		String respuesta = "";
+
+		if(retiro.getTipo().equals("HIPOTECA")) return "No se pueden hacer retiros";
+		retiro.setOperacion(-cantidad);
+		deposito.setOperacion(cantidad);
+
+		//Concatenamos informacion
+		strTrans = retiro.toStringTrans() + "," + deposito.toStringTrans() + ",'" +
+		 			  	 dateFormat.format(date) + "', '" + horaFormat.format(date) + "'";
+
+		//Insertamos la informacion a la tabla
+		respuesta = inse
+		//Actualizamos datos
+
+		System.out.println(strTrans);
+		System.out.println(deposito.toString());
+
+		return "";
 	}
 }

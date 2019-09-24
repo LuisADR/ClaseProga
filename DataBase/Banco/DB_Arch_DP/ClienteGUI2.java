@@ -25,6 +25,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
     private JButton    bCapturar, bConsultar, bSalir;
     private JButton    bConsultarNocta, bConsultarTipo;
     private JButton    bConsultarRet, bConsultarDep;
+    private JButton    bTransferencia, bConsultarTrans;
     private JButton    bDeposito, bRetiro, bCancelarTrans;
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
@@ -50,10 +51,16 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bConsultarNocta = new JButton("Consultar Cuenta");
         bConsultarTipo = new JButton("Consultar Tipo");
 
-        bDeposito = new JButton("Deposito");
-        bRetiro = new JButton("Retiro");
-        bCancelarTrans = new JButton("Cancelar Transaccion");
+        bTransferencia = new JButton("Transferencia");
+        bConsultarTrans = new JButton("Consultar Trans");
 
+        bDeposito = new JButton("Deposito");
+        bConsultarDep = new JButton("Consultar Dep");
+
+        bRetiro = new JButton("Retiro");
+        bConsultarRet = new JButton("Consultar Ret");
+
+        bCancelarTrans = new JButton("Cancelar Transaccion");
         dateFormat = new SimpleDateFormat("dd-MM-yyyy_HH:mm:ss");
 
         bSalir = new JButton("Exit");
@@ -69,12 +76,18 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         bConsultarTipo.addActionListener(this);
         bConsultarNocta.addActionListener(this);
 
+        bTransferencia.addActionListener(this);
+        bConsultarTrans.addActionListener(this);
+
         bDeposito.addActionListener(this);
+        bConsultarDep.addActionListener(this);
+
         bRetiro.addActionListener(this);
+        bConsultarRet.addActionListener(this);
         bCancelarTrans.addActionListener(this);
 
         // 2. Definir los Layouts de los JPanels
-        panel1.setLayout(new GridLayout(9,2));
+        panel1.setLayout(new GridLayout(11,2));
         panel2.setLayout(new FlowLayout());
 
         // 3. Colocar los objetos de los atributos en los JPanels correspondientes
@@ -94,7 +107,13 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         panel1.add(bConsultarTipo);
 
         panel1.add(bDeposito);
+        panel1.add(bConsultarDep);
+
         panel1.add(bRetiro);
+        panel1.add(bConsultarRet);
+
+        panel1.add(bTransferencia);
+        panel1.add(bConsultarTrans);
 
         panel1.add(bCancelarTrans);
         panel1.add(bSalir);
@@ -105,6 +124,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         //Desabilitamos los botones
         bDeposito.setEnabled(false);
         bRetiro.setEnabled(false);
+        bTransferencia.setEnabled(false);
         bCancelarTrans.setEnabled(false);
 
         // 4. Adicionar el panel2 al JFrame y hacerlo visible
@@ -153,6 +173,7 @@ public class ClienteGUI2 extends JFrame implements ActionListener
       bDeposito.setEnabled(action);
       bRetiro.setEnabled(action);
       bCancelarTrans.setEnabled(action);
+      bTransferencia.setEnabled(action);
     }
 
     public void actionPerformed(ActionEvent e)
@@ -181,7 +202,25 @@ public class ClienteGUI2 extends JFrame implements ActionListener
         if(e.getSource() == bConsultar)
         {
             // 1. Realizar consulta de clientes
-            datos = bancoad.consultarClientes();
+            datos = bancoad.consultaGeneral();
+
+            // 2. Desplegar datos
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarDep)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultaDep();
+
+            // 2. Desplegar datos
+            taDatos.setText(datos);
+        }
+
+        if(e.getSource() == bConsultarRet)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.consultaRet();
 
             // 2. Desplegar datos
             taDatos.setText(datos);
@@ -230,6 +269,18 @@ public class ClienteGUI2 extends JFrame implements ActionListener
           taDatos.setText(datos);
 
           enableButtons(true);
+        }
+
+        if(e.getSource() == bTransferencia)
+        {
+            // 1. Realizar consulta de clientes
+            datos = bancoad.trans(
+              JOptionPane.showInputDialog("No a transferir"),
+              Float.parseFloat(JOptionPane.showInputDialog("Cantidad a transferir"))
+            );
+
+            // 2. Desplegar datos
+            taDatos.setText(datos);
         }
 
         if(e.getSource() == bSalir)
