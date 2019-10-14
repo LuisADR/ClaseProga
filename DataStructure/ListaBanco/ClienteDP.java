@@ -6,7 +6,7 @@ public class ClienteDP
     private String nocta, nombre, tipo;
     private int saldo;
 
-    private ClienteDP next;//1133
+    private ClienteDP next;
 
     // Constructores
     public ClienteDP()
@@ -74,12 +74,17 @@ public class ClienteDP
         this.saldo = cantidad;
     }
 
-    public void setNext(ClienteDP nodo//1133){
-        this.next = nodo//1133;
+    public void setNext(ClienteDP nodo){
+        this.next = nodo;
     }
 
     public String toString()
     {
         return this.nocta+"_"+this.nombre+"_"+this.tipo+"_"+this.saldo;
+    }
+
+    public String toStringOperacion()
+    {
+        return this.nocta+"_"+this.tipo+"_"+this.saldo;
     }
 }

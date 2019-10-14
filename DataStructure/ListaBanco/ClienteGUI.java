@@ -193,7 +193,7 @@ public class ClienteGUI extends JFrame implements ActionListener
         if(e.getSource() == bConsultar)
         {
             // 1. Consultar Lista Enlazada de Objetos ClienteDP
-            //datos = bancoad.consultar();
+            datos = bancoad.consultar();
 
             // 2. Despleagr la respuesta
             taDatos.setText(datos);
@@ -205,7 +205,7 @@ public class ClienteGUI extends JFrame implements ActionListener
             String ncta = tfNocta.getText();
 
             // 2.Consultar No. de Cuenta en los Nodos de la Lista Enlazada
-            //datos = bancoad.consultarNocta(ncta);
+            datos = bancoad.consultarNocta(ncta);
 
             // 3. Desplegar la respuesta
             if(datos.equals("LISTA_VACIA"))
@@ -216,7 +216,7 @@ public class ClienteGUI extends JFrame implements ActionListener
                 else
                 {
                     taDatos.setText(datos);
-                    //desplegarDatos(datos);
+                    desplegarDatos(datos);
                     activarBotones();
                 }
         }
@@ -228,10 +228,10 @@ public class ClienteGUI extends JFrame implements ActionListener
             String tcta   = (String)comboCuentas.getSelectedItem();
 
             // 2.Consultar el tipo de cuenta en los Nodos de la Lista Enlazada
-            //datos = bancoad.consultarTipo(tcta);
+            datos = bancoad.consultarTipo(tcta);
 
             // 3. Desplegar la respuesta
-            //taDatos.setText(datos);
+            taDatos.setText(datos);
             taDatos.setText(tcta);
         }
 
@@ -240,10 +240,10 @@ public class ClienteGUI extends JFrame implements ActionListener
             try
             {
                 // 1. Pedir cantidad a depositar al usuario
-                int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Cantidad a retirar ="));
+                int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Cantidad a depositar ="));
 
                 // 2. Depositar la cantidad en el Saldo del Nodo correspondiente en la LList
-                //resultado = bancoad.depositar(cantidad);
+                resultado = bancoad.depositar(cantidad);
 
                 // 3. Desplegar resultado de la captura
                 taDatos.setText(resultado);
@@ -264,7 +264,7 @@ public class ClienteGUI extends JFrame implements ActionListener
                 int cantidad = Integer.parseInt(JOptionPane.showInputDialog("Cantidad a retirar ="));
 
                 // 2. Retirar la cantidad en el Saldo del Nodo correspondiente en la LList
-                //resultado = bancoad.retirar(cantidad);
+                resultado = bancoad.retirar(cantidad);
 
                 // 3. Desplegar resultado de la captura
                 taDatos.setText(resultado);
@@ -285,7 +285,7 @@ public class ClienteGUI extends JFrame implements ActionListener
         if(e.getSource() == bConsultarDepositos)
         {
             // 1. Consultar la Lista Enlazada de Depositos
-            //datos = bancoad.consultarDepositos();
+            datos = bancoad.consultarDepositos();
 
             // 2. Despleagr la respuesta
             taDatos.setText(datos);
@@ -296,7 +296,7 @@ public class ClienteGUI extends JFrame implements ActionListener
         if(e.getSource() == bConsultarRetiros)
         {
             // 1. Consultar la Lista Enlazada de Retiros
-            //datos = bancoad.consultarRetiros();
+            datos = bancoad.consultarRetiros();
 
             // 2. Despleagr la respuesta
             taDatos.setText(datos);
@@ -304,8 +304,12 @@ public class ClienteGUI extends JFrame implements ActionListener
             //inactivarBotones();
         }
 
-        if(e.getSource() == bSalir)
-            System.exit(0);
+        if(e.getSource() == bSalir){
+          bancoad.listaClienteDatosArchivo();
+          bancoad.listaRetiroDatosArchivo();
+          bancoad.listaDepositosDatosArchivo();
+          System.exit(0);
+        }
     }
 
     public static void main(String args[])
