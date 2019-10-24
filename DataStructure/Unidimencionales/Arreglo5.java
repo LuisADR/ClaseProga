@@ -14,7 +14,7 @@ public class Arreglo5{
       str = JOptionPane.showInputDialog("Casilla ["+ i +"] = ");
       numero = Integer.parseInt(str);
       numeros[i] = numero;
-      //comentario 
+      //comentario
     }
 
   }
@@ -56,7 +56,7 @@ public class Arreglo5{
 
     while(!ordenado){
       /* Cambiamos el valor a true, de este modo si no entra en el condicional
-      saldra del siclo while.*/
+      saldra del ciclo while.*/
       ordenado = true;
 
       for (Integer i = 0; i < arreglo.length - 1; i++) {
