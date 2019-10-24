@@ -12,8 +12,8 @@ public class AlumnoGUI extends JFrame implements ActionListener
     private JTextArea  taDatos;
     private JPanel     panel1, panel2;
 
-    private AlumnoADLL    alumnoad = new AlumnoADLL();
-    //private AlumnoADLList alumnoad = new AlumnoADLList();
+    //private AlumnoADLL    alumnoad = new AlumnoADLL();
+    private AlumnoADLList alumnoad = new AlumnoADLList();
 
     // Constructor
     public AlumnoGUI()

@@ -5,8 +5,6 @@ public class AlumnoADLL{
   private AlumnoDP primero, actual, ultimo;
 	private AlumnoDP primeroP, actualP, ultimoP;
 
-
-
   public AlumnoADLL(){
     datosArchivoListaAlumnos();
   }
@@ -28,12 +26,12 @@ public class AlumnoADLL{
   public String consultarListaPromedios(){
     String datos = "";
 
-    if (primero == null) datos = "Lista Vacia";
+    if (primeroP == null) datos = "Lista Vacia";
     else {
-      actual = primero;
-      while (actual != null){
-        datos = datos + actual.toString() + "\n";
-        actual  = actual.getNext();
+      actualP = primeroP;
+      while (actualP != null){
+        datos = datos + actualP.toString() + "\n";
+        actualP  = actualP.getNext();
       }
     }
     return datos;
