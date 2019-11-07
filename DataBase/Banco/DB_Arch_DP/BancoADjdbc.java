@@ -233,6 +233,11 @@ public class BancoADjdbc {
 
 	 	strInsert = "INSERT INTO cliente VALUES("+ datos +")";
 
+		if(tabla.equals("cliente")) {
+			clientedp = new ClienteDP(datos);
+			strInsert = "INSERT INTO cliente VALUES("+ clientedp.toString() +")";
+		}
+
 		try {
 
 			System.out.println(strInsert);
@@ -297,7 +302,7 @@ public class BancoADjdbc {
 		}
 
 		System.out.println(clientedp.toStringOperacion());
-		datos = capturar("depositos", "");
+		datos = capturar("depositos", clientedp.toStringOperacion());
 		datos = datos + "\n" + updateSaldo();
 
 		return datos;
@@ -348,7 +353,7 @@ public class BancoADjdbc {
 		 			  	 dateFormat.format(date) + "', '" + horaFormat.format(date) + "'";
 
 		//Insertamos la informacion a la tabla
-		respuesta = inse
+		respuesta = capturar("transferencias", strTrans);
 		//Actualizamos datos
 
 		System.out.println(strTrans);
