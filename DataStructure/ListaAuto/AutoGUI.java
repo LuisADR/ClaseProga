@@ -11,7 +11,7 @@ public class AutoGUI extends JFrame implements ActionListener
     private JTextArea  taDatos;
     private JPanel     panel1, panel2;
 
-    private AutoADLList auto = new AutoADLList();
+    private Meli auto = new Meli();
 
     public AutoGUI()
     {
@@ -242,7 +242,7 @@ public class AutoGUI extends JFrame implements ActionListener
                 int  plazo = Integer.parseInt(strPlazo);
 
                 // 3. Cotizar automovil desde AutosAD
-                cotizacion = auto.cotizarAuto(plazo);
+                //cotizacion = auto.cotizarAuto(plazo);
 
                 // 4. Desplegar resultado de la captura
                 taDatos.setText(cotizacion);
@@ -264,7 +264,7 @@ public class AutoGUI extends JFrame implements ActionListener
                 int  plazo = Integer.parseInt(strPlazo);
 
                 // 2. Venta automovil desde AutosAD
-                resultado = auto.venta(plazo);
+                //resultado = auto.venta(plazo);
 
                 // 3. Desplegar resultado de la captura
                 taDatos.setText(resultado);
@@ -285,16 +285,17 @@ public class AutoGUI extends JFrame implements ActionListener
         if(e.getSource() == bConsultarVentas)
         {
             // 1. ejecutar el metodo do consultar de AutosAD
-            datos = auto.consultarVentas();
+            //datos = auto.consultarVentas();
 
             // 2. Despleagr la respuesta
             taDatos.setText(datos);
         }
 
         if(e.getSource() == bSalir){
-          auto.datosListaCocheArchivo();
-          auto.datosListaVentasArchivo();
-          
+
+          //auto.datosListaCocheArchivo();
+          //auto.datosListaVentasArchivo();
+
           System.exit(0);
         }
     }

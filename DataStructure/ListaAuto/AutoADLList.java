@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.StringTokenizer;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
 
 public class AutoADLList{
 
