@@ -1,0 +1,1 @@
+//pacienetes de un doctor, doctores que han atendido a un  paciente, analisis de un paciente
