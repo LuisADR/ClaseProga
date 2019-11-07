@@ -140,21 +140,74 @@ public class BancoADLL{
       System.out.println("Error: "+ioe);
     }
   }
+
+  public String crearCliente(String datos){
+    String respuesta = "Ya existe una cuenta";
+
+    actual = new ClienteDP(datos);
+
+    if (consultarNocta(actual.getNocta()).equals("NOT_FOUND") ||
+        consultarNocta(actual.getNocta()).equals("LISTA_VACIA")){
+
+      capturar(datos);
+      respuesta = "Cuenta creada: " + datos;
+    }
+
+    return respuesta
+  }
+
+  public String crearClientePrincipio(String datos){
+    String respuesta = "Ya existe una cuenta";
+
+    actual = new ClienteDP(datos);
+
+    if (consultarNocta(actual.getNocta()).equals("NOT_FOUND") ||
+        consultarNocta(actual.getNocta()).equals("LISTA_VACIA")){
+
+      capturarPrincipio(datos);
+      respuesta = "Cuenta creada al inicio: " + datos;
+    }
+
+    return respuesta
+  }
+
   public String capturar(String datos){
 
     if(primero == null){
       primero = new ClienteDP(datos);
       ultimo = primero;
       ultimo.setNext(null);
+      ultimo.setBack(null);
     } else {
       actual = new ClienteDP(datos);
       ultimo.setNext(actual);
+      posCliente = ultimo;
       ultimo = actual;
       ultimo.setNext(null);
+      ultimo.setBack(posCliente);
     }
     return "Nuevo nodo creado: " + datos;
   }
 
+  public String capturarPrincipio(String datos){
+
+    if(primero == null){
+      primero = new ClienteDP(datos);
+      ultimo = primero;
+      ultimo.setNext(null);
+    } else {
+      //Crear el nodo
+      ultimo = new ClienteDP(datos);
+      //Almacenamos la direccion del primer elemento
+      actual = primero;
+      //Añadimos el nuevo Nodo
+      primero = ultimo;
+      //Enlazamos el Nodo
+      primero.setNext(actual);
+    }
+
+    return "Nodo creado al inicio";
+  }
   public String consultar(){
     String datos = "";
 
