@@ -18,8 +18,8 @@ public class QueueStackGUI extends JFrame implements ActionListener
     private JPanel     panel1, panel2;
     private JTextArea  taDatos;
 
-    private QueueAD queStack = new QueueAD();
-    //private StackAD queStack = new StackAD();
+    //private QueueAD queStack = new QueueAD();
+    private StackAD queStack = new StackAD();
 
     public QueueStackGUI()
     {
@@ -73,7 +73,7 @@ public class QueueStackGUI extends JFrame implements ActionListener
 
         if(e.getSource() == bPop)
         {
-            respuesta = queStack.pop();
+            respuesta = queStack.pop2();
             taDatos.setText(respuesta);
         }
 

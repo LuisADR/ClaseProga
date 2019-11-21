@@ -36,8 +36,7 @@ public class QueueAD{
     public String pop(){
       if(primero == null) return "No hay trabajo en espera";
 
-      else{
-        if(primero != ultimo){
+      else if(primero != ultimo){
           primero = primero.getNext();
           return "Nodo terminado";
         }
@@ -48,5 +47,4 @@ public class QueueAD{
           return "Trabajo terminado";
         }
       }
-    }
 }

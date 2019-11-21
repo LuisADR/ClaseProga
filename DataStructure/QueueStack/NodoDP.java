@@ -2,7 +2,7 @@ public class NodoDP
 {
     // Atributos
     private String nombre;
-    private NodoDP next;
+    private NodoDP next,prev;
 
     // Constructores
     public NodoDP()
@@ -26,6 +26,11 @@ public class NodoDP
     public NodoDP getNext()
     {
         return this.next;
+    }
+
+    public NodoDP getPrev()
+    {
+        return this.prev;
     }
 
     // Metodos: Mutators (seters)
