@@ -4,12 +4,17 @@ import java.awt.event.*;
 
 public class Busqueda extends JPanel implements ActionListener{
 
-  private String [] medicamentos = {"Next", "Ibuprofeno", "Vick"}, receta;
+  //atributos siempre sin privados y van al inicio
+  private String [] medicamentos, receta;
   private JButton bCrear;
 
+  //Cosntructor
   public Busqueda(){
     bCrear = new JButton("Crear receta");
+    medicamentos = new String[] {"Next", "Ibuprofeno", "Vick"}; //Todas las variables se crean/inician en el constructor
+
     bCrear.addActionListener(this);
+
     this.add(bCrear);
   }
 

@@ -4,11 +4,13 @@ import java.awt.event.*;
 
 public class Ejemplo extends JFrame implements ActionListener{
 
+  //atributos siempre sin privados y van al inicio
   private Busqueda busqueda;
   private JPanel panel1;
   private JMenuBar mPrincipal;
   private JMenuItem miCrearDatos, miReceta, miMostrar, miCrearReceta;
 
+  //Constructor
   public Ejemplo(){
     super("Ejemplo");
     //Creamos objetos
@@ -84,7 +86,7 @@ public class Ejemplo extends JFrame implements ActionListener{
 
     }
 
-    //Evento para "crear Receta" <---------------------JPanel
+    //Evento para "crear Receta" <---------------------Uso JPanel
     if(e.getSource() == miCrearReceta){
       panel1.removeAll();
       panel1.add(busqueda.getPanel());
